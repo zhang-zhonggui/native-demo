@@ -7,16 +7,21 @@ jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
     steps:
+      # 拉去代码
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      # 设置jdk还环境
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
           java-version: '21'
+          cache: maven
+      # 打包
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-      - name: Login to Aliyun CR
+      # 登录阿里云
+      - name: Login to Aliyun
         uses: docker/login-action@v1
         with:
           registry: registry.cn-shanghai.aliyuncs.com
