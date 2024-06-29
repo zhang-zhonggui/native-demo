@@ -1,0 +1,30 @@
+name: Docker Build and Push
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+      - name: Login to Aliyun CR
+        uses: docker/login-action@v1
+        with:
+          registry: registry.cn-shanghai.aliyuncs.com
+          username: ${{ secrets.ALIYUN_CR_USER }}
+          password: ${{ secrets.ALIYUN_CR_PWD }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: registry.cn-shanghai.aliyuncs.com/z-zg/github:latest
