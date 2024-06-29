@@ -1,25 +1,20 @@
-name: Java CI with Maven
-
+name: demo
 on:
-  push:
-    branches: [ "master" ]
-
+  release:
+    types: [ created ]
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: maven
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-      - name: Upload dependency graph
-        uses: advanced-security/maven-dependency-submission-action@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          base_ref: master  # Replace with your base branch
-          head_ref: ${{ github.ref }} # Use the current ref (e.g., branch name)
+      - name: Publish package
+        run: mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
