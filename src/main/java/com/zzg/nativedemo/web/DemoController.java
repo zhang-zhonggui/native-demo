@@ -16,4 +16,9 @@ public class DemoController {
     public String getDemo() {
         return "hello word";
     }
+
+    @GetMapping("zzg")
+    public String test() {
+        return "hello word";
+    }
 }
