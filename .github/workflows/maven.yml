@@ -3,8 +3,6 @@ name: Java CI with Maven
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
 
 jobs:
   build:
@@ -19,9 +17,9 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-
-      # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       - name: Upload dependency graph
         uses: advanced-security/maven-dependency-submission-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          base_ref: master  # Replace with your base branch
+          head_ref: ${{ github.ref }} # Use the current ref (e.g., branch name)
