@@ -1,4 +1,4 @@
-FROM openjdk:21
+FROM azul/zulu-openjdk:21-jre
 COPY target/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
 EXPOSE 8080
